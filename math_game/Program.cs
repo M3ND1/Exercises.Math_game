@@ -149,8 +149,10 @@ while (true)
             n = diff_adjuster(level_diff);
             while (number_of_games > 0)
             {
-                first_number = rnd.Next(1, n); // change subtraction to digit % 2 == 0. even if hard 
-                second_number = rnd.Next(2, 6);
+                bool flag = false;
+                flag = rnd.NextDouble() >= 0.5;
+                if (flag == true) { first_number = rnd.Next(2, n)*2; second_number = 2; }
+                else { first_number = rnd.Next(2, n)*3; second_number = 3; }
                 Console.WriteLine("{0} / {1} \t\tYour points: {2}", first_number, second_number, correct_questions + "/5");
                 solution = Convert.ToInt32(Console.ReadLine());
                 Console.Clear();
