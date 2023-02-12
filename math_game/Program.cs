@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Timers;
 
 List<string> history = new List<string>();
 List<double> time_history = new List<double>();
@@ -7,7 +6,7 @@ Random rnd = new Random();
 int selection, level_diff, rand_diff, n, first_number, second_number, solution, total_points;
 int number_of_games = 5; // default number of games
 int correct_questions = 0;
-Stopwatch stopwatch= new Stopwatch();
+Stopwatch stopwatch = new Stopwatch();
 void menu()
 {
     Console.BackgroundColor = ConsoleColor.DarkYellow;
@@ -29,14 +28,14 @@ int diff_adjuster(int level)
 {
     if (level == 1) { rand_diff = 10; }
     else if (level == 2) { rand_diff = 20; }
-    else rand_diff = 30; 
+    else rand_diff = 30;
     return rand_diff;
 }
 int level()
 {
     int difficulty = 1;
     Console.WriteLine("What difficuty do You want? Provide numbers.");
-    while(true)
+    while (true)
     {
         try
         {
@@ -44,7 +43,7 @@ int level()
             Console.WriteLine("2 - Medium");
             Console.WriteLine("3 - Hard");
             difficulty = Convert.ToInt32(Console.ReadLine());
-            if(difficulty >= 1 && difficulty <= 3)  break;
+            if (difficulty >= 1 && difficulty <= 3) break;
         }
         catch (FormatException)
         {
@@ -57,7 +56,6 @@ int level()
     Console.ForegroundColor = ConsoleColor.White;
     return difficulty;
 }
-
 int games_number()
 {
     int games;
@@ -84,6 +82,72 @@ int games_number()
     }
     return games;
 }
+
+int game() //przekazac difficulty i na jej podstawie wypelnaic first i secodn numebr
+{
+    int g;
+    string[] rand_game = { "+", "-", "*", "/" };
+    while (number_of_games > 0)
+    {
+        g = rnd.Next(0, rand_game.Length);
+        if(g == 3)
+        {
+            bool flag;
+            flag = rnd.NextDouble() >= 0.5;
+            if (flag == true) { first_number = rnd.Next(2, n) * 2; second_number = 2; }
+            else { first_number = rnd.Next(2, n) * 3; second_number = 3; }
+
+        } else if(g == 1)
+        {
+            first_number = rnd.Next(5, n);
+            second_number = rnd.Next(1, n - 5);
+            if (second_number > first_number)
+            {
+                second_number -= first_number;
+            }
+
+        }
+        else {
+            first_number = rnd.Next(5, n);
+            second_number = rnd.Next(1, n - 5);
+        }
+        if (second_number == 0) second_number++;
+        Console.Clear();
+        Console.WriteLine("{0} {1} {2} \t\tYour points: {3}/{4}", first_number, rand_game[g], second_number, correct_questions, total_points);
+        solution = Convert.ToInt32(Console.ReadLine());
+        Console.Clear();
+        if (g == 0)
+        {
+            if (solution == (first_number + second_number))
+            {
+                correct_questions++;
+            }
+        }
+        else if (g == 1)
+        {
+            if (solution == (first_number - second_number))
+            {
+                correct_questions++;
+            }
+        }
+        else if (g == 2)
+        {
+            if (solution == (first_number * second_number))
+            {
+                correct_questions++;
+            }
+        }
+        else
+        {
+            if (solution == (first_number / second_number))
+            {
+                correct_questions++;
+            }
+        }
+        number_of_games--;
+    }
+    return correct_questions;
+}
 while (true)
 {
     menu();
@@ -95,7 +159,7 @@ while (true)
             Console.ForegroundColor = ConsoleColor.White;
             break;
         }
-        catch(FormatException) 
+        catch (FormatException)
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.DarkRed;
@@ -120,7 +184,7 @@ while (true)
             while (number_of_games > 0)
             {
                 first_number = rnd.Next(1, n);
-                second_number = rnd.Next(1, n-5);
+                second_number = rnd.Next(1, n - 5);
                 Console.Clear();
                 Console.WriteLine("{0} + {1} \t\tYour points: {2}/{3}", first_number, second_number, correct_questions, total_points);
                 solution = Convert.ToInt32(Console.ReadLine()); //try catch here?
@@ -130,6 +194,7 @@ while (true)
                 }
                 number_of_games--;
             }
+            //correct_questions = game();
             stopwatch.Stop();
             time_history.Add(Math.Round(stopwatch.Elapsed.TotalSeconds, 2));
             history.Add(correct_questions + "/" + total_points + "points");
@@ -143,13 +208,14 @@ while (true)
             number_of_games = games_number();
             total_points = number_of_games;
             stopwatch.Start();
+            //int game
             while (number_of_games > 0)
             {
                 first_number = rnd.Next(1, n);
-                second_number = rnd.Next(1, n-5);
+                second_number = rnd.Next(1, n - 5);
                 if (second_number == 0) second_number++;
                 Console.Clear();
-                Console.WriteLine("{0} - {1} \t\tYour points: {2}/{3}", first_number, second_number, correct_questions,total_points);
+                Console.WriteLine("{0} - {1} \t\tYour points: {2}/{3}", first_number, second_number, correct_questions, total_points);
                 solution = Convert.ToInt32(Console.ReadLine());
                 Console.Clear();
                 if (solution == (first_number - second_number))
@@ -174,7 +240,7 @@ while (true)
             while (number_of_games > 0)
             {
                 first_number = rnd.Next(1, n);
-                second_number = rnd.Next(1, n-5);
+                second_number = rnd.Next(1, n - 5);
                 Console.Clear();
                 Console.WriteLine("{0} * {1} \t\tYour points: {2}/{3}", first_number, second_number, correct_questions, total_points); ;
                 solution = Convert.ToInt32(Console.ReadLine());
@@ -202,8 +268,8 @@ while (true)
             {
                 bool flag = false;
                 flag = rnd.NextDouble() >= 0.5;
-                if (flag == true) { first_number = rnd.Next(2, n)*2; second_number = 2; }
-                else { first_number = rnd.Next(2, n)*3; second_number = 3; }
+                if (flag == true) { first_number = rnd.Next(2, n) * 2; second_number = 2; }
+                else { first_number = rnd.Next(2, n) * 3; second_number = 3; }
                 Console.Clear();
                 Console.WriteLine("{0} / {1} \t\tYour points: {2}/{3}", first_number, second_number, correct_questions, total_points);
                 solution = Convert.ToInt32(Console.ReadLine());
@@ -241,8 +307,20 @@ while (true)
                 System.Threading.Thread.Sleep(10000);
             }
             break;
-        //case 6:
-            //random!
+        case 6:
+            Console.Clear();
+            level_diff = level();
+            n = diff_adjuster(level_diff);
+            number_of_games = games_number();
+            total_points = number_of_games;
+            stopwatch.Start();
+            correct_questions = game();
+            stopwatch.Stop();
+            time_history.Add(Math.Round(stopwatch.Elapsed.TotalSeconds, 2));
+            history.Add(correct_questions + "/" + total_points + "points");
+            correct_questions = 0;
+            stopwatch.Reset();
+            break;
         default:
             Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.WriteLine("Type number from 1 to 5.");
